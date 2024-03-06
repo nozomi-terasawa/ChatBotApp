@@ -1,4 +1,4 @@
-package com.github.mzkii.apps.chatgpt
+package com.github.`soleil-colza`.apps.chatgpt
 
 import android.app.Application
 
