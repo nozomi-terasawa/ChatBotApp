@@ -4,10 +4,10 @@ plugins {
   id("com.google.devtools.ksp")
 }
 android {
-  namespace = "com.github.mzkii.apps.chatgpt"
+  namespace = "com.github.tera330.apps.chatgpt"
   compileSdk = 34
   defaultConfig {
-    applicationId = "com.github.mzkii.apps.chatgpt"
+    applicationId = "com.github.tera330.apps.chatgpt"
     minSdk = 24
     targetSdk = 34
     versionCode = 1

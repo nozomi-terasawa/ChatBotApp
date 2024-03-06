@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
   <application
-      android:name=".MainActivity"
+      android:name="com.github.tera330.apps.chatgpt.MyApplication"
       android:allowBackup="true"
       android:dataExtractionRules="@xml/data_extraction_rules"
       android:enableOnBackInvokedCallback="true"
@@ -18,7 +18,7 @@
         android:shell="true"
         tools:targetApi="q" />
     <activity
-        android:name=".MainActivity"
+        android:name="com.github.tera330.apps.chatgpt.MainActivity"
         android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />

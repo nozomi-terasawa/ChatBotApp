@@ -1,4 +1,4 @@
-package com.github.`soleil-colza`.apps.chatgpt
+package com.github.tera330.apps.chatgpt
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
