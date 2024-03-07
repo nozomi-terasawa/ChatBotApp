@@ -1,4 +1,4 @@
-package com.github.tera330.apps.chatgpt
+package com.github.tera330.apps.chatgpt.ui
 
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.Arrangement
@@ -16,12 +16,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-class inputWordScreen {
-}
-
 @Composable
 fun InputField(
-    modifier: Modifier,
+    modifier: Modifier = Modifier
+        .fillMaxSize()
     ) {
     var inputWord by remember { mutableStateOf("") }
     Column(
@@ -31,7 +29,7 @@ fun InputField(
             value = inputWord,
             onValueChange = { inputWord = it },
             label = { Text(text = "入力してください") },
-            modifier = androidx.compose.ui.Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -41,6 +39,6 @@ fun InputField(
 private fun A(modifier: Modifier = Modifier) {
     Column {
         Spacer(modifier = modifier.weight(1f))
-        InputField(modifier = modifier.fillMaxSize())
+        InputField()
     }
 }
