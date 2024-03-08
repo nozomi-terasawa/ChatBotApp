@@ -1,8 +1,6 @@
 package com.github.tera330.apps.chatgpt.ui
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -19,19 +17,18 @@ fun MessageBody(messageViewModel: MessageViewModel, modifier: Modifier = Modifie
     val messageList = messageViewModel.messageList.value
 
     Column() {
-    LazyColumn(modifier = modifier.padding(top = 100.dp)) {
+    LazyColumn(modifier = modifier.padding(top = 100.dp)
+        .weight(1f)) {
         items(messageList.size) { index ->
             val message = messageList[index]
-            Box() {
                 Text(
                     text = message.content,
                     fontSize = 24.sp,
                     modifier = modifier.padding(20.dp)
                 )
-            }
         }
     }
-        Spacer(Modifier.weight(1f))
+        // Spacer(Modifier.weight(1f))
         InputField(
             modifier = modifier
                 .imePadding()

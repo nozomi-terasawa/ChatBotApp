@@ -10,7 +10,7 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-private const val OPENAI_API_KEY = "s"
+private const val OPENAI_API_KEY = ""
 private const val OPEN_AI_API_BASE_URL = "https://api.openai.com/"
 
 
