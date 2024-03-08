@@ -2,7 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="DrawerPreview">
+      <entry key="A">
+        <State />
+      </entry>
+      <entry key="DrawerPreview (1)">
         <State />
       </entry>
       <entry key="MainActivity">
@@ -11,10 +14,10 @@
       <entry key="ResTest">
         <State />
       </entry>
-      <entry key="a">
+      <entry key="app">
         <State />
       </entry>
-      <entry key="app">
+      <entry key="inputFieldPreview">
         <State />
       </entry>
     </value>
