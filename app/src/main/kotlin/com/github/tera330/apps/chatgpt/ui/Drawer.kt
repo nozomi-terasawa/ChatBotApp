@@ -20,14 +20,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.github.tera330.apps.chatgpt.MessageUiState
 import com.github.tera330.apps.chatgpt.MessageViewModel
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
 @Composable
 fun SampleDrawer(
-    messageViewModel: MessageViewModel,
-    modifier: Modifier
+    uiState: MessageUiState,
+    modifier: Modifier,
+    inputText: (String) -> Unit,
+    getResponse: (String) -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -59,17 +62,24 @@ fun SampleDrawer(
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    MessageBody(messageViewModel)
+                    MessageBody(
+                        uiState,
+                        modifier,
+                        inputText,
+                        getResponse)
                 }
             }
         }
     }
 }
 
+/*
 @Composable
 @ExperimentalMaterial3Api
 @Preview
 fun DrawerPreview() {
     val messageViewModel = MessageViewModel()
-    SampleDrawer(messageViewModel, Modifier.fillMaxWidth())
+    SampleDrawer(uiState , Modifier.fillMaxWidth())
 }
+
+ */

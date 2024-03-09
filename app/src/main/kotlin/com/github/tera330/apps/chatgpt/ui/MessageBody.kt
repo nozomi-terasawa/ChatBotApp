@@ -8,24 +8,26 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.tera330.apps.chatgpt.MessageViewModel
+import com.github.tera330.apps.chatgpt.MessageUiState
 
 
 @Composable
-fun MessageBody(messageViewModel: MessageViewModel, modifier: Modifier = Modifier) {
+fun MessageBody(
+    uiState: MessageUiState,
+    modifier: Modifier = Modifier,
+    inputText: (String) -> Unit,
+    getResponse : (String) -> Unit
+    ) {
 
-    val messageUiState by messageViewModel.messageUiState.collectAsState()
 
     Column {
         LazyColumn(
             modifier = modifier.padding(top = 100.dp).weight(1f),
             content = {
-                items(messageUiState.messageList) { message ->
+                items(uiState.messageList) { message ->
                     Text(
                         text = message.content,
                         fontSize = 24.sp,
@@ -39,7 +41,9 @@ fun MessageBody(messageViewModel: MessageViewModel, modifier: Modifier = Modifie
             modifier = modifier
                 .imePadding()
                 .fillMaxWidth(),
-            messageViewModel
+            uiState,
+            inputText,
+            getResponse
         )
     }
 }
