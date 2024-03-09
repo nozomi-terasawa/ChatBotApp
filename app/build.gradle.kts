@@ -74,9 +74,11 @@ dependencies {
 
   implementation ("com.squareup.okhttp3:logging-interceptor:4.10.0")
 
-
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
 
+  implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
+  ksp("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
+  implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
 
 
 }
