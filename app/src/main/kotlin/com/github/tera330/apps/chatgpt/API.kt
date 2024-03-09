@@ -11,7 +11,6 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 private const val OPENAI_API_KEY = ""
-private const val OPEN_AI_API_BASE_URL = "https://api.openai.com/"
 
 
 interface OpenAiApiService { // OpenAIのAPIを呼び出すインターフェース
@@ -23,7 +22,7 @@ interface OpenAiApiService { // OpenAIのAPIを呼び出すインターフェー
     suspend fun chatCompletions(@Body request: ChatRequest): ChatResponse
 }
 
-suspend fun A(messageViewModel: MessageViewModel, userMassage: String) {
+suspend fun apiService(messageViewModel: MessageViewModel, userMassage: String) {
     val retrofit = Retrofit.Builder()
         .baseUrl("https://api.openai.com/")
         .addConverterFactory(GsonConverterFactory.create())
@@ -37,17 +36,23 @@ suspend fun A(messageViewModel: MessageViewModel, userMassage: String) {
         temperature = 0.7
     )
 
+    val messageUiState = messageViewModel.messageUiState
+
     try {
         val response = openAiApiService.chatCompletions(request)
         Log.d("Response", "$response" + "成功")
         val newResponse = response.choices[0].message.content
-        messageViewModel.response.value = newResponse
-        messageViewModel.userMessage.value = "" // 入力欄をクリア
+        Log.d("result", userMassage)
 
+        // messageUiState.value.response = newResponse
 
-        val currentList = messageViewModel.messageList.value.toMutableList() // 現在のリストを取得し、変更可能なリストに変換
-        currentList.add(Message("assistant", messageViewModel.response.value)) // リストに要素を追加
-        messageViewModel.messageList.value = currentList.toList() // 変更されたリストを新しい値としてMutableStateに設定
+        messageViewModel.getResponse(newResponse)
+
+        val currentList = messageUiState.value.messageList.toMutableList() // 現在のリストを取得し、変更可能なリストに変換
+        currentList.add(Message("assistant", newResponse)) // リストに要素を追加
+        messageUiState.value.messageList = currentList.toMutableList() // 変更されたリストを新しい値としてMutableStateに設定
+        Log.d("result", "APIの中でリストを更新")
+
 
     } catch (e: Exception) {
         Log.d("Response", "$e.message" + "エラー")
@@ -55,11 +60,14 @@ suspend fun A(messageViewModel: MessageViewModel, userMassage: String) {
 }
 
 /*
+
 @Composable
 @Preview
 fun ResTest() {
+    val messageViewModel = MessageViewModel()
     LaunchedEffect(Unit) {
-        A()
+        api(messageViewModel = messageViewModel, "こんにちは")
     }
 }
+
  */

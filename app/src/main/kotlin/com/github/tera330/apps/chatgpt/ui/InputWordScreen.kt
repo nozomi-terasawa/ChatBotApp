@@ -1,5 +1,6 @@
 package com.github.tera330.apps.chatgpt.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,13 +10,14 @@ import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.tera330.apps.chatgpt.A
 import com.github.tera330.apps.chatgpt.MessageViewModel
+import com.github.tera330.apps.chatgpt.apiService
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 import kotlinx.coroutines.launch
 
@@ -25,26 +27,37 @@ fun InputField(
     messageViewModel: MessageViewModel
 ) {
     val scope = rememberCoroutineScope()
+    val messageUiState = messageViewModel.messageUiState
 
     Row(
         modifier = modifier.fillMaxWidth(), // このRowを画面いっぱいに拡張する
     ) {
         OutlinedTextField(
-            value = messageViewModel.userMessage.value,
-            onValueChange = { it ->
-                messageViewModel.userMessage.value = it
+            value = messageViewModel.messageUiState.collectAsState().value.userMessage,
+            onValueChange = {
+                messageViewModel.inputText(it)
             },
             label = { Text(text = "入力してください") },
-            modifier = Modifier.weight(1f) // OutlinedTextFieldが残りのスペースを使用するように重み付け
+            modifier = Modifier
+                .weight(1f) // OutlinedTextFieldが残りのスペースを使用するように重み付け
                 .padding(bottom = 10.dp)
         )
         Button(
             onClick = {
-                if (!messageViewModel.userMessage.value.isNullOrBlank()) {
-                    scope.launch { A(messageViewModel, messageViewModel.userMessage.value) }
-                    val currentList = messageViewModel.messageList.value.toMutableList()
-                    currentList.add(Message("user", messageViewModel.userMessage.value))
-                    messageViewModel.messageList.value = currentList.toList()
+                if (!messageUiState.value.userMessage.isNullOrBlank()) {
+                    val userRequest = messageUiState.value.userMessage
+
+                    messageUiState.value.userMessage = "" // 入力欄をクリア
+
+                    val currentList = messageUiState.value.messageList.toMutableList() // 現在のリストを取得し、変更可能なリストに変換
+                    currentList.add(Message("user", userRequest)) // リストに要素を追加
+                    messageUiState.value.messageList = currentList.toMutableList() // 変更されたリストを新しい値としてMutableStateに設定
+                    Log.d("result", "すぐにリストを更新")
+
+
+
+                    scope.launch { apiService(messageViewModel, userRequest) }
+
                 }
             },
             modifier = Modifier // Buttonの幅を指定せず、内容に合わせる
