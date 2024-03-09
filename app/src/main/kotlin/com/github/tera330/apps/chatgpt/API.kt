@@ -23,7 +23,6 @@ interface OpenAiApiService { // OpenAIのAPIを呼び出すインターフェー
 }
 
 suspend fun apiService(
-    uiState: MessageUiState,
     userMassage: String,
     getResponse: (String) -> Unit
     ) {

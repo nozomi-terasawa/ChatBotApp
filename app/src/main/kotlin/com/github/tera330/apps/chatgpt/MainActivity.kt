@@ -23,7 +23,9 @@ internal class MainActivity : ComponentActivity() {
         messageViewModel.messageUiState,
         Modifier.fillMaxWidth(),
         inputText = { string -> messageViewModel.inputText(string) },
-        getResponse = { string -> messageViewModel.getResponse(string) }
+        getResponse = { string -> messageViewModel.getResponse(string) },
+        changeList = { list -> messageViewModel.updateList(list)},
+        clearText = { messageViewModel.clearText()}
         )
     }
   }

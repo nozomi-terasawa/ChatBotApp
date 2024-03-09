@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.tera330.apps.chatgpt.MessageUiState
+import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 
 
 @Composable
@@ -19,7 +20,9 @@ fun MessageBody(
     uiState: MessageUiState,
     modifier: Modifier = Modifier,
     inputText: (String) -> Unit,
-    getResponse : (String) -> Unit
+    getResponse : (String) -> Unit,
+    changeList: (MutableList<Message>) -> Unit,
+    clearText: () -> Unit
     ) {
 
 
@@ -43,7 +46,9 @@ fun MessageBody(
                 .fillMaxWidth(),
             uiState,
             inputText,
-            getResponse
+            getResponse,
+            changeList,
+            clearText
         )
     }
 }

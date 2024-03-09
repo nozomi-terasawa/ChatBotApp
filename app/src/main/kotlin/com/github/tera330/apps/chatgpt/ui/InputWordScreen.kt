@@ -22,7 +22,10 @@ fun InputField(
     modifier: Modifier,
     uiState: MessageUiState,
     inputText: (String) -> Unit,
-    getResponse: (String) -> Unit
+    getResponse: (String) -> Unit,
+    changeList: (MutableList<Message>) -> Unit,
+    clearText: () -> Unit
+
 ) {
     val scope = rememberCoroutineScope()
 
@@ -44,9 +47,11 @@ fun InputField(
                 if (!uiState.userMessage.isNullOrBlank()) {
                     val currentList = uiState.messageList.toMutableList()
                     currentList.add(Message("user", uiState.userMessage))
-                    uiState.messageList = currentList.toMutableList()
+                    changeList(currentList)
+                    clearText()
 
-                    scope.launch { apiService(uiState, uiState.userMessage, getResponse) }
+
+                    scope.launch { apiService(uiState.userMessage, getResponse) }
                     Log.d("result", uiState.userMessage)
 
                     Log.d("result", uiState.userMessage)

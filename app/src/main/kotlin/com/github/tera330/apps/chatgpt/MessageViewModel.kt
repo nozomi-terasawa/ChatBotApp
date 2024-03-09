@@ -23,13 +23,13 @@ class MessageViewModel: ViewModel() {
     }
 
     fun getResponse(apiResponse: String) {
+        Log.d("result", "true")
         messageUiState = messageUiState.copy(
             response = apiResponse,
-            userMessage = ""
         )
         val currentList = messageUiState.messageList.toMutableList() // 現在のリストを取得し、変更可能なリストに変換
         currentList.add(Message("assistant", apiResponse)) // リストに要素を追加
-        messageUiState.messageList = currentList.toMutableList() // 変更されたリストを新しい値としてMutableStateに設定
+        updateList(currentList)
     }
 
     fun clearText() {

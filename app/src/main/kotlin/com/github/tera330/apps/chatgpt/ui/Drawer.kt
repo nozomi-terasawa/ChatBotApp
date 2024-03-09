@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import com.github.tera330.apps.chatgpt.MessageUiState
+import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
@@ -27,7 +28,10 @@ fun SampleDrawer(
     uiState: MessageUiState,
     modifier: Modifier,
     inputText: (String) -> Unit,
-    getResponse: (String) -> Unit
+    getResponse: (String) -> Unit,
+    changeList: (MutableList<Message>) -> Unit,
+    clearText: () -> Unit
+
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -63,7 +67,10 @@ fun SampleDrawer(
                         uiState,
                         modifier,
                         inputText,
-                        getResponse)
+                        getResponse,
+                        changeList,
+                        clearText
+                        )
                 }
             }
         }
