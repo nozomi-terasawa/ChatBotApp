@@ -45,17 +45,8 @@ suspend fun apiService(
         val response = openAiApiService.chatCompletions(request)
         Log.d("Response", "$response" + "成功")
         val newResponse = response.choices[0].message.content
-        Log.d("result", response.toString() + "レスだよ")
-
-        // messageUiState.value.response = newResponse
 
         getResponse(newResponse)
-
-        val currentList = uiState.messageList.toMutableList() // 現在のリストを取得し、変更可能なリストに変換
-        currentList.add(Message("assistant", newResponse)) // リストに要素を追加
-        uiState.messageList = currentList.toMutableList() // 変更されたリストを新しい値としてMutableStateに設定
-        Log.d("result", "APIの中でリストを更新")
-
 
     } catch (e: Exception) {
         Log.d("Response", "$e.message" + "エラー")

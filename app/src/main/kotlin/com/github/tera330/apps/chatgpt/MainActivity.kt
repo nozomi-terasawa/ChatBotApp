@@ -6,8 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.github.tera330.apps.chatgpt.ui.SampleDrawer
 
@@ -20,9 +18,9 @@ internal class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
 
     setContent {
-      val uiState by messageViewModel.messageUiState.collectAsState()
+      // val uiState by messageViewModel.messageUiState.collectAsState()
       SampleDrawer(
-        uiState,
+        messageViewModel.messageUiState,
         Modifier.fillMaxWidth(),
         inputText = { string -> messageViewModel.inputText(string) },
         getResponse = { string -> messageViewModel.getResponse(string) }

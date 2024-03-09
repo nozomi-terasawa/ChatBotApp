@@ -42,19 +42,14 @@ fun InputField(
         Button(
             onClick = {
                 if (!uiState.userMessage.isNullOrBlank()) {
-                    val userRequest = uiState.userMessage
+                    val currentList = uiState.messageList.toMutableList()
+                    currentList.add(Message("user", uiState.userMessage))
+                    uiState.messageList = currentList.toMutableList()
 
-                    uiState.userMessage = "" // 入力欄をクリア
+                    scope.launch { apiService(uiState, uiState.userMessage, getResponse) }
+                    Log.d("result", uiState.userMessage)
 
-                    val currentList = uiState.messageList.toMutableList() // 現在のリストを取得し、変更可能なリストに変換
-                    currentList.add(Message("user", userRequest)) // リストに要素を追加
-                    uiState.messageList = currentList.toMutableList() // 変更されたリストを新しい値としてMutableStateに設定
-                    Log.d("result", userRequest.toString() + "リクエストだよ")
-
-
-
-                    scope.launch { apiService(uiState, userRequest, getResponse) }
-
+                    Log.d("result", uiState.userMessage)
                 }
             },
             modifier = Modifier // Buttonの幅を指定せず、内容に合わせる
