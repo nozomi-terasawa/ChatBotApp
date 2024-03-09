@@ -1,6 +1,5 @@
 package com.github.tera330.apps.chatgpt.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,11 +9,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.tera330.apps.chatgpt.MessageUiState
 import com.github.tera330.apps.chatgpt.apiService
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
+import com.github.tera330.apps.chatgpt.roomdatabase.ConversationRepository
+import com.github.tera330.apps.chatgpt.roomdatabase.MessageDatabase
+import com.github.tera330.apps.chatgpt.roomdatabase.SaveMessageViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -28,6 +32,10 @@ fun InputField(
 
 ) {
     val scope = rememberCoroutineScope()
+    val repository = ConversationRepository(MessageDatabase.getDatabase(LocalContext.current).conversationDao())
+    val viewModel: SaveMessageViewModel = viewModel {
+        SaveMessageViewModel(repository)
+    }
 
     Row(
         modifier = modifier.fillMaxWidth(), // このRowを画面いっぱいに拡張する
@@ -51,10 +59,11 @@ fun InputField(
                     clearText()
 
 
-                    scope.launch { apiService(uiState.userMessage, getResponse) }
-                    Log.d("result", uiState.userMessage)
 
-                    Log.d("result", uiState.userMessage)
+
+                    scope.launch {
+                        apiService(uiState.userMessage, getResponse)
+                    }
                 }
             },
             modifier = Modifier // Buttonの幅を指定せず、内容に合わせる

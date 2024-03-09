@@ -10,9 +10,8 @@ class ConversationRepository(private val conversationsDao: ConversationsDao) {
         return conversationsDao.getAllConversations()
     }
 
-    suspend fun insertConversation(conversations: Conversation) {
+    suspend fun insertConversation(conversations: Conversation) =
         conversationsDao.insertConversation(conversations)
-    }
 }
 
 class MessageDataRepository(private val messageDataDao: MessageDataDao) {

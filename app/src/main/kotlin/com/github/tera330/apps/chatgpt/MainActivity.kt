@@ -9,10 +9,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Modifier
 import com.github.tera330.apps.chatgpt.ui.SampleDrawer
 
+
 @ExperimentalMaterial3Api
 internal class MainActivity : ComponentActivity() {
 
   private val messageViewModel: MessageViewModel by viewModels()
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -24,9 +26,10 @@ internal class MainActivity : ComponentActivity() {
         Modifier.fillMaxWidth(),
         inputText = { string -> messageViewModel.inputText(string) },
         getResponse = { string -> messageViewModel.getResponse(string) },
-        changeList = { list -> messageViewModel.updateList(list)},
-        clearText = { messageViewModel.clearText()}
-        )
+        changeList = { list -> messageViewModel.updateList(list) },
+        clearText = { messageViewModel.clearText() }
+      )
+
     }
   }
 }

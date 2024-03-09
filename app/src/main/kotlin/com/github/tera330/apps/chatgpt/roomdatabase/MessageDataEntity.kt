@@ -21,7 +21,7 @@ data class MessageData(
     val role: String = "",
     val message: String = "",
     @ColumnInfo(name = "conversation_id")
-    val conversationId: Long = 0
+    val conversationId: Int = 0
 )
 
 
@@ -30,5 +30,6 @@ data class MessageData(
 data class Conversation (
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "conversation_id")
-    val conversationsId: Long = 0
+    val conversationsId: Long = 0,
+    val title: String = ""
 )

@@ -1,9 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
   extra.apply {
-    set("room_version", "2.5.2")
+    set("room_version", "2.6.1")
   }
 }
+
+allprojects {
+  repositories {
+    google()
+    jcenter()
+  }
+}
+
 
 plugins {
   id("com.android.application") version "8.2.2" apply false
