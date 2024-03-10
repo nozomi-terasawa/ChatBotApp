@@ -1,7 +1,6 @@
 package com.github.tera330.apps.chatgpt.ui
 
 import android.util.Log
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
@@ -21,12 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.github.tera330.apps.chatgpt.MessageUiState
 import com.github.tera330.apps.chatgpt.encryptedsharedpreferences.EncryptedSharedPreferences
-import com.github.tera330.apps.chatgpt.encryptedsharedpreferences.InputKeyScreen
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 import com.github.tera330.apps.chatgpt.roomdatabase.ConversationRepository
 import com.github.tera330.apps.chatgpt.roomdatabase.MessageDatabase
@@ -52,9 +48,7 @@ fun HomeScreen(
     }
     val navController: NavHostController = rememberNavController()
 
-    val encryptedSharedPreferences = EncryptedSharedPreferences(
-        LocalContext.current)
-    val key = encryptedSharedPreferences.getData("pass")
+
 
 
     ModalNavigationDrawer(
@@ -65,7 +59,6 @@ fun HomeScreen(
     ) {
         Scaffold(
             topBar = {
-                //if (navController.currentBackStackEntry?.destination?.route == null) { // todo　これよくない
                     Log.d("result", "Current destination: ${navController.currentDestination?.route.toString()}")
 
                     TopAppBar(
@@ -91,38 +84,10 @@ fun HomeScreen(
                             }
                         }
                     )
-                //}
             }
         ) { innerPadding ->
-            /*
-            val startDestination = if (key != null) {
-                com.github.tera330.apps.chatgpt.ui.Screen.HomeScreen.name
-            } else {
-                com.github.tera330.apps.chatgpt.ui.Screen.SaveKeyScreen.name
-            }
 
-             */
-            val startDestination = Screen.SaveKeyScreen.name
-            NavHost(
-                navController = navController,
-                startDestination = startDestination,
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                composable(route = com.github.tera330.apps.chatgpt.ui.Screen.SaveKeyScreen.name) {
-                    InputKeyScreen(navigateHome = { navController.navigate(com.github.tera330.apps.chatgpt.ui.Screen.HomeScreen.name) })
-                }
-                composable(route = com.github.tera330.apps.chatgpt.ui.Screen.HomeScreen.name) {
-                    MessageBody(
-                        uiState = uiState,
-                        inputText = inputText,
-                        getResponse = getResponse,
-                        changeList = changeList,
-                        clearText = clearText
-                    )
-                }
-                Log.d("result", "Current destination: ${navController.currentDestination?.route.toString()}")
-
-            }
+            MessageBody(uiState, modifier, inputText, getResponse, changeList, clearText)
         }
     }
 }
