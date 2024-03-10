@@ -9,16 +9,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.tera330.apps.chatgpt.MessageUiState
 import com.github.tera330.apps.chatgpt.apiService
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
-import com.github.tera330.apps.chatgpt.roomdatabase.ConversationRepository
-import com.github.tera330.apps.chatgpt.roomdatabase.MessageDatabase
-import com.github.tera330.apps.chatgpt.roomdatabase.SaveMessageViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -29,13 +24,8 @@ fun InputField(
     getResponse: (String) -> Unit,
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit
-
 ) {
     val scope = rememberCoroutineScope()
-    val repository = ConversationRepository(MessageDatabase.getDatabase(LocalContext.current).conversationDao())
-    val viewModel: SaveMessageViewModel = viewModel {
-        SaveMessageViewModel(repository)
-    }
 
     Row(
         modifier = modifier.fillMaxWidth(), // このRowを画面いっぱいに拡張する
@@ -58,9 +48,6 @@ fun InputField(
                     changeList(currentList)
                     clearText()
 
-
-
-
                     scope.launch {
                         apiService(uiState.userMessage, getResponse)
                     }
@@ -75,7 +62,6 @@ fun InputField(
 
 
 /*
-
 @Composable
 @Preview
 private fun inputFieldPreview(modifier: Modifier = Modifier.fillMaxWidth()) {
@@ -85,5 +71,4 @@ private fun inputFieldPreview(modifier: Modifier = Modifier.fillMaxWidth()) {
         InputField(modifier.fillMaxWidth(), messageViewModel,)
     }
 }
-
  */

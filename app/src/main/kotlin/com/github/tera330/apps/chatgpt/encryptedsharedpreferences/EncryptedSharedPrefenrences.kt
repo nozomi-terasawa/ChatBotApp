@@ -1,18 +1,6 @@
 package com.github.tera330.apps.chatgpt.encryptedsharedpreferences
 
 import android.content.Context
-import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
@@ -41,31 +29,6 @@ class EncryptedSharedPreferences (context: Context) {
     fun removeData(key: String) {
         prefs.edit().remove(key).apply()
     }
-}
-
-@Composable
-fun SaveKey(modifier: Modifier = Modifier) {
-
-    val apiKeyState = remember { mutableStateOf("") }
-    val encryptedSharedPreferences = EncryptedSharedPreferences(LocalContext.current)
-
-    Column {
-        OutlinedTextField(
-            value = apiKeyState.value,
-            onValueChange = { apiKeyState.value = it },
-            label = { Text("APIキーを入力してください") }
-        )
-    }
-    encryptedSharedPreferences.saveKey("pass", apiKeyState.toString())
-    val key = encryptedSharedPreferences.getData("pass")
-
-    Log.d("SaveKey", key.toString() + "けっかだよ")
-}
-
-@Composable
-@Preview
-fun PreviewSaveKey(modifier: Modifier = Modifier.fillMaxSize()) {
-    SaveKey(modifier = modifier.fillMaxWidth())
 }
 
 
