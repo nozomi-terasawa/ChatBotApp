@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
@@ -13,27 +12,26 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
+
 
 @Composable
-fun InputScreen(modifier: Modifier = Modifier.fillMaxSize()) {
-    Column(
-        verticalArrangement = Arrangement.Center
-    ) {
-        InputKey()
-    }
-}
+fun InputKeyScreen(
+    modifier: Modifier = Modifier,
+    navigateHome: () -> Unit) {
 
-@Composable
-fun InputKey(modifier: Modifier = Modifier) {
 
     val apiKeyState = remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
     val encryptedSharedPreferences = EncryptedSharedPreferences(LocalContext.current)
+
+    Log.d("result", "キー入力画面")
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -58,7 +56,11 @@ fun InputKey(modifier: Modifier = Modifier) {
             Button(
                 onClick = {
                     if (!apiKeyState.value.isNullOrBlank()) {
-
+                        scope.launch {
+                            encryptedSharedPreferences.saveKey("pass", apiKeyState.value)
+                        }
+                        navigateHome()
+                        Log.d("result", "押下されてます")
                     }
                 },
             ) {
@@ -67,14 +69,13 @@ fun InputKey(modifier: Modifier = Modifier) {
         }
     }
 
-    encryptedSharedPreferences.saveKey("pass", apiKeyState.toString())
-    val key = encryptedSharedPreferences.getData("pass")
-
-    Log.d("SaveKey", key.toString() + "けっかだよ")
 }
 
+/*
 @Composable
 @Preview
 fun PreviewSaveKey(modifier: Modifier = Modifier.fillMaxSize()) {
     InputScreen(modifier = modifier.fillMaxWidth())
 }
+
+ */

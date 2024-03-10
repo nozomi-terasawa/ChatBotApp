@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Modifier
-import com.github.tera330.apps.chatgpt.ui.SampleDrawer
+import com.github.tera330.apps.chatgpt.ui.HomeScreen
 
 
 @ExperimentalMaterial3Api
@@ -21,7 +21,8 @@ internal class MainActivity : ComponentActivity() {
 
     setContent {
       // val uiState by messageViewModel.messageUiState.collectAsState()
-      SampleDrawer(
+
+      HomeScreen(
         messageViewModel.messageUiState,
         Modifier.fillMaxWidth(),
         inputText = { string -> messageViewModel.inputText(string) },

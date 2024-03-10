@@ -1,5 +1,6 @@
 package com.github.tera330.apps.chatgpt.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,10 +10,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.tera330.apps.chatgpt.MessageUiState
 import com.github.tera330.apps.chatgpt.apiService
+import com.github.tera330.apps.chatgpt.encryptedsharedpreferences.EncryptedSharedPreferences
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 import kotlinx.coroutines.launch
 
@@ -26,6 +29,9 @@ fun InputField(
     clearText: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val encryptedSharedPreferences = EncryptedSharedPreferences(LocalContext.current)
+    val key = encryptedSharedPreferences.getData("pass") ?: ""
+
 
     Row(
         modifier = modifier.fillMaxWidth(), // このRowを画面いっぱいに拡張する
@@ -48,8 +54,10 @@ fun InputField(
                     changeList(currentList)
                     clearText()
 
+                    Log.d("result", key + "キーの名前です")
+
                     scope.launch {
-                        apiService(uiState.userMessage, getResponse)
+                        apiService(uiState.userMessage, getResponse, key)
                     }
                 }
             },

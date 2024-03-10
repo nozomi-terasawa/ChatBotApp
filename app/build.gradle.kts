@@ -82,5 +82,8 @@ dependencies {
 
   implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
+  implementation("androidx.navigation:navigation-compose:2.6.0")
+
+
 
 }

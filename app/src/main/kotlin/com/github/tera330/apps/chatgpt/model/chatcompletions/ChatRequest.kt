@@ -7,3 +7,8 @@ data class ChatRequest (
     val messages: List<Message>,
     val temperature: Double
 )
+
+data class ChatHeader (
+    // var contentType: String,
+    var Authorization: String
+)

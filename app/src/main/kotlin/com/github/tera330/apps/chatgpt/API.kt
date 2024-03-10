@@ -7,24 +7,24 @@ import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.Headers
+import retrofit2.http.Header
 import retrofit2.http.POST
-
-private const val OPENAI_API_KEY = ""
 
 
 interface OpenAiApiService { // OpenAIのAPIを呼び出すインターフェース
-    @Headers( // HTTPリクエストのヘッダー
-        "Content-Type: application/json",
-        "Authorization: Bearer ${OPENAI_API_KEY}"
-    )
+
     @POST("v1/chat/completions")
-    suspend fun chatCompletions(@Body request: ChatRequest): ChatResponse
+    suspend fun chatCompletions(
+        @Body request: ChatRequest,
+        @Header("Authorization") str: String,
+    ): ChatResponse
 }
+
 
 suspend fun apiService(
     userMassage: String,
-    getResponse: (String) -> Unit
+    getResponse: (String) -> Unit,
+    apiKey: String
     ) {
     val retrofit = Retrofit.Builder()
         .baseUrl("https://api.openai.com/")
@@ -39,9 +39,15 @@ suspend fun apiService(
         temperature = 0.7
     )
 
+    val OPENAI_API_KEY = apiKey
+
+
+    val header =
+        // "Content-Type: application/json",
+        "Bearer ${OPENAI_API_KEY}"
 
     try {
-        val response = openAiApiService.chatCompletions(request)
+        val response = openAiApiService.chatCompletions(request, header)
         Log.d("Response", "$response" + "成功")
         val newResponse = response.choices[0].message.content
 

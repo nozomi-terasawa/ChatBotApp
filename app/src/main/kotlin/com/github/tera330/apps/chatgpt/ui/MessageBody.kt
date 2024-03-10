@@ -1,5 +1,6 @@
 package com.github.tera330.apps.chatgpt.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -24,9 +25,9 @@ fun MessageBody(
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit
     ) {
-
-
     Column {
+        Log.d("result", "Home画面です")
+
         LazyColumn(
             modifier = modifier.padding(top = 100.dp).weight(1f),
             content = {
@@ -39,7 +40,6 @@ fun MessageBody(
                 }
             }
         )
-
         InputField(
             modifier = modifier
                 .imePadding()
