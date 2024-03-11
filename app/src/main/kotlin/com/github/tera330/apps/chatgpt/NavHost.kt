@@ -28,7 +28,6 @@ fun AppNav(
     getResponse: (String) -> Unit,
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit,
-    createTitle: (String) -> Unit,
     updateMessageList: (MutableList<Message>) -> Unit
 ) {
     // val startDestination = Screen.SaveKeyScreen.name
@@ -60,7 +59,6 @@ fun AppNav(
                 changeList = changeList,
                 clearText = clearText,
                 modifier = Modifier,
-                createTitle = createTitle,
                 updateMessageList = updateMessageList
             )
         }

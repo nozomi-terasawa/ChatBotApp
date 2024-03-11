@@ -41,9 +41,24 @@ suspend fun apiService(
         temperature = 0.7
     )
 
-    val createTitle = ChatRequest(
+    val order = """
+        あなたは文章を要約して、どのような内容か一目でわかるようにタイトルを作成するボットです。
+        下記のuserMessageを要約し、簡潔にタイトルを付けてください。
+        
+        例：Android開発をしたいのですが、XMLとComposeではどのような違いがあるのでしょうか？
+        タイトル生成：XMLとComposeの違い
+        
+        上記の例のように簡潔にまとめてください。実際にタイトルを作成する際は、例の"XMLとComposeの違い"の部分だけでよいです。"タイトル生成："入りません。
+        
+        "userMessage: ${userMassage}"
+        
+    """.trimIndent()
+
+    val title = ChatRequest(
         model = "gpt-3.5-turbo",
-        messages = listOf(Message("user", "${userMassage}" + "この質問をファイルのタイトルとして扱うために、短めの文章に要約して")),
+        messages = listOf(Message(
+            "user",
+            order)),
         temperature = 0.7
     )
 
@@ -60,12 +75,22 @@ suspend fun apiService(
         val newResponse = response.choices[0].message.content
         Log.d("Response", "$response" + "成功")
 
+        /*
+        val title = if (newResponse.length > 15) {
+            newResponse.substring(0, 15) + "..."
+        } else {
+            newResponse
+        }
+         */
 
         if (uiState.messageList.size <= 2) {
-            val titleResponse = openAiApiService.chatCompletions(createTitle, header)
-            Log.d("Response", titleResponse.choices[0].message.content + "要約されたタイトルです。")
+            val titleResponse = openAiApiService.chatCompletions(title, header)
+            Log.d("Response", titleResponse.choices[0].message.content + "要約されたタイトル。")
+            val t = titleResponse.choices[0].message.content
 
             // createTitle(titleResponse.choices[0].message.content)
+            createTitle(t)
+
         }
 
 

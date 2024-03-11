@@ -49,7 +49,6 @@ fun HomeScreen(
     getResponse: (String) -> Unit,
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit,
-    createTitle: (String) -> Unit,
     updateMessageList: (MutableList<Message>) -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -142,7 +141,7 @@ fun HomeScreen(
                     getResponse,
                     changeList,
                     clearText,
-                    createTitle,
+                    createTitle = { string -> messageViewModel.createTitle(string) },
                     messageViewModel
                 )
             }
@@ -162,7 +161,7 @@ fun DrawerContent(
         LazyColumn {
             items(conversation) { item ->
                 Text(
-                    text = item.conversationsId.toString(),
+                    text = item.title,
                     fontSize = 30.sp,
                     modifier = Modifier.clickable {
                         onItemCLicked(item)

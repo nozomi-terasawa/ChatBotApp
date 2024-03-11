@@ -1,6 +1,5 @@
 package com.github.tera330.apps.chatgpt.roomdatabase
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -17,7 +16,7 @@ class SaveMessageViewModel(
         private set
 
     // val messageUiState by mutableStateOf(MessageData())
-    val conversationState by mutableStateOf(Conversation())
+    var conversationState by mutableStateOf(Conversation())
 
     suspend fun saveConversation(): Long {
         var id: Long =0
@@ -65,11 +64,9 @@ class SaveMessageViewModel(
     }
 
     fun createTitle(title: String) {
-        Log.d("result", "呼び出し開始")
-        savedUiState = savedUiState.copy(
+        conversationState = conversationState.copy(
             title = title
         )
-        Log.d("result", "完了")
     }
 }
 
