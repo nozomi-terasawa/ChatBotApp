@@ -43,10 +43,40 @@ class MessageViewModel: ViewModel() {
             messageList = newList
         )
     }
+    fun updateLoad() {
+        messageUiState = messageUiState.copy(
+            apiUiState = ResponseUiState.Load
+        )
+    }
+
+    fun updateSuccess() {
+        messageUiState = messageUiState.copy(
+            apiUiState = ResponseUiState.Success
+        )
+    }
+
+    fun updateStr(newStr: String) {
+        messageUiState = messageUiState.copy(
+            responseContent = newStr
+        )
+    }
+    fun updateNotYet() {
+        messageUiState = messageUiState.copy(
+            apiUiState = ResponseUiState.NotYet
+        )
+    }
 }
 
 data class MessageUiState(
     var userMessage: String = "",
     var response: String = "",
-    var messageList: MutableList<Message> = mutableListOf()
+    var messageList: MutableList<Message> = mutableListOf(),
+    var apiUiState: ResponseUiState = ResponseUiState.NotYet,
+    var responseContent: String = ""
 )
+
+sealed interface ResponseUiState {
+    object Success: ResponseUiState
+    object NotYet: ResponseUiState
+    object Load: ResponseUiState
+}

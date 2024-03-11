@@ -33,7 +33,12 @@ fun InputField(
     getResponse: (String) -> Unit,
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit,
-    createTitle: (String) -> Unit
+    createTitle: (String) -> Unit,
+    updateLoad: () -> Unit,
+    updateSuccess: () -> Unit,
+    updateStr: (String) -> Unit,
+    updateNotYet: () -> Unit
+
 ) {
     val scope = rememberCoroutineScope()
     val encryptedSharedPreferences = EncryptedSharedPreferences(LocalContext.current)
@@ -60,13 +65,15 @@ fun InputField(
         IconButton(
             onClick = {
                 if (!uiState.userMessage.isNullOrBlank()) {
+                    updateLoad()
+
                     val currentList = uiState.messageList.toMutableList()
                     currentList.add(Message("user", uiState.userMessage))
                     changeList(currentList)
                     clearText()
 
                     scope.launch {
-                        apiService(uiState.userMessage, getResponse, key, uiState, createTitle)
+                        apiService(uiState.userMessage, getResponse, key, uiState, createTitle, scope, updateSuccess, updateStr, updateNotYet)
                     }
                 }
             },

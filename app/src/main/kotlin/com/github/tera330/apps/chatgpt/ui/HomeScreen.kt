@@ -50,7 +50,12 @@ fun HomeScreen(
     getResponse: (String) -> Unit,
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit,
-    updateMessageList: (MutableList<Message>) -> Unit
+    updateMessageList: (MutableList<Message>) -> Unit,
+    updateLoad: () -> Unit,
+    updateSuccess: () -> Unit,
+    updateStr: (String) -> Unit,
+    updateNotYet: () -> Unit
+
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -145,7 +150,11 @@ fun HomeScreen(
                     changeList,
                     clearText,
                     createTitle = { string -> messageViewModel.createTitle(string) },
-                    messageViewModel
+                    messageViewModel,
+                    updateLoad,
+                    updateSuccess,
+                    updateStr,
+                    updateNotYet
                 )
             }
         }

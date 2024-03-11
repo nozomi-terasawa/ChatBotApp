@@ -28,7 +28,12 @@ fun AppNav(
     getResponse: (String) -> Unit,
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit,
-    updateMessageList: (MutableList<Message>) -> Unit
+    updateMessageList: (MutableList<Message>) -> Unit,
+    updateLoad: () -> Unit,
+    updateSuccess: () -> Unit,
+    updateStr: (String) -> Unit,
+    updateNotYet: () -> Unit
+
 ) {
     // val startDestination = Screen.SaveKeyScreen.name
     val navController: NavHostController = rememberNavController()
@@ -59,7 +64,11 @@ fun AppNav(
                 changeList = changeList,
                 clearText = clearText,
                 modifier = Modifier,
-                updateMessageList = updateMessageList
+                updateMessageList = updateMessageList,
+                updateLoad = updateLoad,
+                updateSuccess = updateSuccess,
+                updateStr = updateStr,
+                updateNotYet = updateNotYet
             )
         }
     }

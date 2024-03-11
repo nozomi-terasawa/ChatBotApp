@@ -1,5 +1,6 @@
 package com.github.tera330.apps.chatgpt.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -21,11 +22,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.tera330.apps.chatgpt.MessageUiState
+import com.github.tera330.apps.chatgpt.ResponseUiState
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 import com.github.tera330.apps.chatgpt.roomdatabase.SaveMessageViewModel
 import kotlinx.coroutines.delay
@@ -40,7 +41,13 @@ fun MessageBody(
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit,
     createTitle: (String) -> Unit,
-    messageViewModel: SaveMessageViewModel
+    messageViewModel: SaveMessageViewModel,
+    updateLoad: () -> Unit,
+    updateSuccess: () -> Unit,
+    updateStr: (String) -> Unit,
+    updateNotYet: () -> Unit
+
+
     ) {
     Column {
         LaunchedEffect(Unit) {
@@ -55,26 +62,75 @@ fun MessageBody(
             content = {
                 items(uiState.messageList) { message ->
 
-                    if (message.role == "assistant") {
-                        ChatBotMessage(
-                            text = message.content,
-                            modifier = Modifier,
-                            textSize = 24.sp
-                        )
+
+                    when (uiState.apiUiState) {
+                        ResponseUiState.NotYet -> Log.d("result", "NotYetです")
+                        ResponseUiState.Load -> Log.d("result", "Loadです")
+                        ResponseUiState.Success -> Log.d("result", "Successです")
+
+                        else -> {}
+                    }
+                    if (message.role == "assistant" && uiState.messageList.indexOf(message) == uiState.messageList.size - 1) {
+                        if (uiState.apiUiState == ResponseUiState.Success) {
+                            Log.d("result", "SUCCESです")
+
+                            ChatBotMessage(
+                                text = uiState.responseContent,
+                                modifier = Modifier,
+                                textSize = 24.sp,
+                                updateNotYet = updateNotYet
+                            )
+                        } else {
+                            Column(modifier = modifier) {
+                                Icon(
+                                    imageVector = Icons.Default.Android,
+                                    contentDescription = null,
+                                    modifier = modifier.padding(start = 20.dp, top = 15.dp)
+                                )
+                                Text(
+                                    text = message.content,
+                                    fontSize = 24.sp,
+                                    modifier = modifier.padding(start = 20.dp, end = 20.dp, top = 5.dp)
+                                )
+                            }
+                        }
                     } else {
                         Column(modifier = modifier) {
-                            Icon(
-                                imageVector = Icons.Default.Person,
-                                contentDescription = null,
-                                modifier = modifier.padding(start = 20.dp, top = 15.dp)
-                            )
-                            Text(
-                                text = message.content,
-                                fontSize = 24.sp,
-                                modifier = modifier.padding(start = 20.dp, end = 20.dp, top = 5.dp)
-                            )
+                            if (message.role == "assistant") {
+                                Icon(
+                                    imageVector = Icons.Default.Android,
+                                    contentDescription = null,
+                                    modifier = modifier.padding(start = 20.dp, top = 15.dp)
+                                )
+                                Text(
+                                    text = message.content,
+                                    fontSize = 24.sp,
+                                    modifier = modifier.padding(
+                                        start = 20.dp,
+                                        end = 20.dp,
+                                        top = 5.dp
+                                    )
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.Person,
+                                    contentDescription = null,
+                                    modifier = modifier.padding(start = 20.dp, top = 15.dp)
+                                )
+                                Text(
+                                    text = message.content,
+                                    fontSize = 24.sp,
+                                    modifier = modifier.padding(
+                                        start = 20.dp,
+                                        end = 20.dp,
+                                        top = 5.dp
+                                    )
+                                )
+
+                            }
                         }
                     }
+
                 }
             }
         )
@@ -87,13 +143,17 @@ fun MessageBody(
             getResponse,
             changeList,
             clearText,
-            createTitle
+            createTitle,
+            updateLoad,
+            updateSuccess,
+            updateStr,
+            updateNotYet
         )
     }
 }
 
 @Composable
-fun TypingText(text: String, modifier: Modifier = Modifier, textSize: TextUnit) {
+fun TypingText(text: String, modifier: Modifier = Modifier, textSize: TextUnit, updateNotYet: () -> Unit) {
     var visibleText by remember { mutableStateOf("") }
     val textFieldValue = remember { mutableStateOf(TextFieldValue()) }
 
@@ -104,6 +164,7 @@ fun TypingText(text: String, modifier: Modifier = Modifier, textSize: TextUnit) 
             delay(50) // 文字を表示する速度を調整
             visibleText += char
         }
+        updateNotYet()
     }
 
     BasicTextField(
@@ -115,7 +176,7 @@ fun TypingText(text: String, modifier: Modifier = Modifier, textSize: TextUnit) 
 }
 
 @Composable
-fun ChatBotMessage(text: String, modifier: Modifier, textSize: TextUnit) {
+fun ChatBotMessage(text: String, modifier: Modifier, textSize: TextUnit, updateNotYet: () -> Unit) {
     Column(modifier = modifier) {
         Icon(
             imageVector = Icons.Default.Android,
@@ -125,14 +186,18 @@ fun ChatBotMessage(text: String, modifier: Modifier, textSize: TextUnit) {
         TypingText(
             text = text,
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 5.dp),
-            textSize = textSize
+            textSize = textSize,
+            updateNotYet = updateNotYet
         )
     }
 }
 
+/*
 @Composable
 @Preview
 fun BotPreview() {
     val modifier = Modifier
-    ChatBotMessage(text = "", modifier = modifier, textSize = 24.sp)
+    ChatBotMessage(text = "", modifier = modifier, textSize = 24.sp, updateNotYet = )
 }
+
+ */

@@ -4,6 +4,8 @@ import android.util.Log
 import com.github.tera330.apps.chatgpt.model.chatcompletions.ChatRequest
 import com.github.tera330.apps.chatgpt.model.chatcompletions.ChatResponse
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
@@ -26,7 +28,12 @@ suspend fun apiService(
     getResponse: (String) -> Unit,
     apiKey: String,
     uiState: MessageUiState,
-    createTitle: (String) -> Unit
+    createTitle: (String) -> Unit,
+    scope: CoroutineScope,
+    updateSuccess: () -> Unit,
+    updateStr: (String) -> Unit,
+    updateNotYet: () -> Unit
+
     ) {
     val retrofit = Retrofit.Builder()
         .baseUrl("https://api.openai.com/")
@@ -70,9 +77,18 @@ suspend fun apiService(
         "Bearer ${OPENAI_API_KEY}"
 
     try {
+        var response: ChatResponse? = null
+        var newResponse = ""
+        val job = scope.launch {
+            response = openAiApiService.chatCompletions(request, header)
+        }
+        updateSuccess()
+        job.join()
 
-        val response = openAiApiService.chatCompletions(request, header)
-        val newResponse = response.choices[0].message.content
+        response?.let {
+            newResponse = it.choices[0].message.content
+            // newResponseを使用する他の処理
+        }
         Log.d("Response", "$response" + "成功")
 
         /*
@@ -92,10 +108,10 @@ suspend fun apiService(
             createTitle(t)
 
         }
-
-
-        getResponse(newResponse)
-
+        updateStr(newResponse)// アニメーション表示用のstr
+        newResponse.let {
+            getResponse(newResponse)
+        }
     } catch (e: Exception) {
         Log.d("Response", "$e.message" + "エラー")
     }
