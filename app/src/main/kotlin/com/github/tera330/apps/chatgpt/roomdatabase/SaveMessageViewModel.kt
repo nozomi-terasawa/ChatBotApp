@@ -34,7 +34,6 @@ class SaveMessageViewModel(
             messageDataRepository.insertMessage(message)
         }
     }
-
     suspend fun getAllConversations(): List<Conversation> {
         var conversationList = listOf<Conversation>()
         val job = viewModelScope.launch {
@@ -44,9 +43,24 @@ class SaveMessageViewModel(
         return conversationList
     }
 
+    suspend fun getMessagesByConversationId(conversationId: Long): List<MessageData> {
+        var messageList = listOf<MessageData>()
+        val job = viewModelScope.launch {
+            messageList = messageDataRepository.getMessagesByConversationId(conversationId)
+        }
+        job.join()
+        return messageList
+    }
+
     fun updateConversationList (newList: MutableList<Conversation>) {
         savedUiState = savedUiState.copy(
             conversationList = newList
+        )
+    }
+
+    fun updateMessage(message: MutableList<MessageData>) {
+        savedUiState = savedUiState.copy(
+            messageDataList = message
         )
     }
 

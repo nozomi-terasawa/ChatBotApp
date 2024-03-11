@@ -29,7 +29,8 @@ internal class MainActivity : ComponentActivity() {
         getResponse = { string -> messageViewModel.getResponse(string) },
         changeList = { list -> messageViewModel.updateList(list) },
         clearText = { messageViewModel.clearText() },
-        createTitle = { string -> savedViewModel.createTitle(string) }
+        createTitle = { string -> savedViewModel.createTitle(string) },
+        updateMessageList = { list -> messageViewModel.updateList(list)}
       )
 
     }

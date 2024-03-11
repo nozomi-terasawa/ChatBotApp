@@ -1,5 +1,6 @@
 package com.github.tera330.apps.chatgpt
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -37,6 +38,7 @@ class MessageViewModel: ViewModel() {
     }
 
     fun updateList(newList: MutableList<Message>) {
+        Log.d("result", "リストを更新します")
         messageUiState = messageUiState.copy(
             messageList = newList
         )

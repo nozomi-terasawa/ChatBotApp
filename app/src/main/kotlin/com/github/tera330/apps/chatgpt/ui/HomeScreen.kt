@@ -49,13 +49,15 @@ fun HomeScreen(
     getResponse: (String) -> Unit,
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit,
-    createTitle: (String) -> Unit
+    createTitle: (String) -> Unit,
+    updateMessageList: (MutableList<Message>) -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     val conversationRepository = ConversationRepository(MessageDatabase.getDatabase(LocalContext.current).conversationDao())
     val messageDataRepository = MessageDataRepository(MessageDatabase.getDatabase(LocalContext.current).messageDataDao())
+
     val messageViewModel: SaveMessageViewModel = viewModel {
         SaveMessageViewModel(conversationRepository, messageDataRepository)
     }
@@ -69,10 +71,21 @@ fun HomeScreen(
                     DrawerContent(
                         conversation = savedState.conversationList,
                         onItemCLicked = { selectedItem ->
-                            // selectedItem.conversationsId
+                            val id = selectedItem.conversationsId
+                            Log.d("result", "押されたIDは" + id + "です")
+                            scope.launch {
+                                val messageData = messageViewModel.getMessagesByConversationId(id)
+                                val messageList = messageData.map { messageData ->
+                                    Message(
+                                        role = messageData.role,
+                                        content = messageData.message
+                                    )
+                                }
+                                updateMessageList(messageList.toMutableList())
+                            }
                         },
                         drawerState,
-                        scope
+                        scope,
                     )
 
                 }
@@ -152,11 +165,10 @@ fun DrawerContent(
                     text = item.conversationsId.toString(),
                     fontSize = 30.sp,
                     modifier = Modifier.clickable {
-                        onItemCLicked
+                        onItemCLicked(item)
                         scope.launch {
                             drawerState.close()
                         }
-                        Log.d("result", "ドロワーが押されました")
                     }
                 )
                 Divider() // リストアイテムの間に区切り線を追加
