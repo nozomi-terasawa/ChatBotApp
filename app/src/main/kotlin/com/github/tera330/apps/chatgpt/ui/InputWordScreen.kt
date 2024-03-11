@@ -1,6 +1,5 @@
 package com.github.tera330.apps.chatgpt.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,7 +25,8 @@ fun InputField(
     inputText: (String) -> Unit,
     getResponse: (String) -> Unit,
     changeList: (MutableList<Message>) -> Unit,
-    clearText: () -> Unit
+    clearText: () -> Unit,
+    createTitle: (String) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val encryptedSharedPreferences = EncryptedSharedPreferences(LocalContext.current)
@@ -54,10 +54,8 @@ fun InputField(
                     changeList(currentList)
                     clearText()
 
-                    Log.d("result", key + "キーの名前です")
-
                     scope.launch {
-                        apiService(uiState.userMessage, getResponse, key)
+                        apiService(uiState.userMessage, getResponse, key, uiState, createTitle)
                     }
                 }
             },

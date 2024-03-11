@@ -1,22 +1,58 @@
 package com.github.tera330.apps.chatgpt.roomdatabase
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 class SaveMessageViewModel(
-    private val conversationRepository: ConversationRepository
+    private val conversationRepository: ConversationRepository,
+    private val messageDataRepository: MessageDataRepository
 ): ViewModel() {
-    val messageUiState by mutableStateOf(MessageData())
+
+    var savedUiState by mutableStateOf(SavedUiState())
+        private set
+
+    // val messageUiState by mutableStateOf(MessageData())
     val conversationState by mutableStateOf(Conversation())
 
-    suspend fun saveConversation() {
+    suspend fun saveConversation(): Long {
+        var id: Long =0
+        val job = viewModelScope.launch {
+            id = conversationRepository.insertConversation(conversationState)
+
+        }
+        job.join()
+        return id
+    }
+
+    suspend fun saveMessage(message: MessageData) {
         viewModelScope.launch {
-            conversationRepository.insertConversation(conversationState)
+            messageDataRepository.insertMessage(message)
         }
     }
 
+    fun updateConversationList (newList: MutableList<Conversation>) {
+        savedUiState = savedUiState.copy(
+            conversationList = newList
+        )
+    }
+
+    fun createTitle(title: String) {
+        Log.d("result", "呼び出し開始")
+        savedUiState = savedUiState.copy(
+            title = title
+        )
+        Log.d("result", "完了")
+
+    }
 }
 
+data class SavedUiState(
+    val conversationList: MutableList<Conversation> = mutableListOf(),
+    val messageDataList: MutableList<MessageData> = mutableListOf(),
+    val title: String = ""
+)

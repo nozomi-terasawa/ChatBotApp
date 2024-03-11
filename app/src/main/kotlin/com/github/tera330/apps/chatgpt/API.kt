@@ -24,7 +24,9 @@ interface OpenAiApiService { // OpenAIのAPIを呼び出すインターフェー
 suspend fun apiService(
     userMassage: String,
     getResponse: (String) -> Unit,
-    apiKey: String
+    apiKey: String,
+    uiState: MessageUiState,
+    createTitle: (String) -> Unit
     ) {
     val retrofit = Retrofit.Builder()
         .baseUrl("https://api.openai.com/")
@@ -39,6 +41,12 @@ suspend fun apiService(
         temperature = 0.7
     )
 
+    val createTitle = ChatRequest(
+        model = "gpt-3.5-turbo",
+        messages = listOf(Message("user", "${userMassage}" + "この質問をファイルのタイトルとして扱うために、短めの文章に要約して")),
+        temperature = 0.7
+    )
+
     val OPENAI_API_KEY = apiKey
 
 
@@ -47,9 +55,19 @@ suspend fun apiService(
         "Bearer ${OPENAI_API_KEY}"
 
     try {
+
         val response = openAiApiService.chatCompletions(request, header)
-        Log.d("Response", "$response" + "成功")
         val newResponse = response.choices[0].message.content
+        Log.d("Response", "$response" + "成功")
+
+
+        if (uiState.messageList.size <= 2) {
+            val titleResponse = openAiApiService.chatCompletions(createTitle, header)
+            Log.d("Response", titleResponse.choices[0].message.content + "要約されたタイトルです。")
+
+            // createTitle(titleResponse.choices[0].message.content)
+        }
+
 
         getResponse(newResponse)
 

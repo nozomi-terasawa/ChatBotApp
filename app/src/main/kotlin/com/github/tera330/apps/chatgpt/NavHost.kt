@@ -1,6 +1,5 @@
 package com.github.tera330.apps.chatgpt
 
-import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,8 +12,12 @@ import com.github.tera330.apps.chatgpt.encryptedsharedpreferences.EncryptedShare
 import com.github.tera330.apps.chatgpt.encryptedsharedpreferences.InputKeyScreen
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 import com.github.tera330.apps.chatgpt.ui.HomeScreen
-import com.github.tera330.apps.chatgpt.ui.Screen
 
+
+enum class Screen {
+    SaveKeyScreen,
+    HomeScreen
+}
 
 @ExperimentalMaterial3Api
 @Composable
@@ -25,43 +28,39 @@ fun AppNav(
     getResponse: (String) -> Unit,
     changeList: (MutableList<Message>) -> Unit,
     clearText: () -> Unit,
+    createTitle: (String) -> Unit
 ) {
-    val startDestination = Screen.SaveKeyScreen.name
+    // val startDestination = Screen.SaveKeyScreen.name
     val navController: NavHostController = rememberNavController()
     val encryptedSharedPreferences = EncryptedSharedPreferences(
         LocalContext.current)
     val key = encryptedSharedPreferences.getData("pass")
 
-    /*
-    val startDestination = if (key != null) {
-        com.github.tera330.apps.chatgpt.ui.Screen.HomeScreen.name
-    } else {
-        com.github.tera330.apps.chatgpt.ui.Screen.SaveKeyScreen.name
-    }
 
-     */
+    val startDestination = if (key != null) {
+        com.github.tera330.apps.chatgpt.Screen.HomeScreen.name
+    } else {
+        com.github.tera330.apps.chatgpt.Screen.SaveKeyScreen.name
+    }
 
     NavHost(
         navController = navController,
         startDestination = startDestination,
         modifier = modifier
     ) {
-        composable(route = com.github.tera330.apps.chatgpt.ui.Screen.SaveKeyScreen.name) {
-            InputKeyScreen(navigateHome = { navController.navigate(Screen.HomeScreen.name) })
+        composable(route = com.github.tera330.apps.chatgpt.Screen.SaveKeyScreen.name) {
+            InputKeyScreen(navigateHome = { navController.navigate(com.github.tera330.apps.chatgpt.Screen.HomeScreen.name) })
         }
-        composable(route = com.github.tera330.apps.chatgpt.ui.Screen.HomeScreen.name) {
+        composable(route = com.github.tera330.apps.chatgpt.Screen.HomeScreen.name) {
             HomeScreen(
                 uiState = uiState,
                 inputText = inputText,
                 getResponse = getResponse,
                 changeList = changeList,
                 clearText = clearText,
-                modifier = Modifier
+                modifier = Modifier,
+                createTitle = createTitle
             )
         }
-        Log.d(
-            "result",
-            "Current destination: ${navController.currentDestination?.route.toString()}"
-        )
     }
 }
