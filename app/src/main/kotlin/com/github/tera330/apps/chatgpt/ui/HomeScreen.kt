@@ -1,5 +1,6 @@
 package com.github.tera330.apps.chatgpt.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -84,10 +85,10 @@ fun HomeScreen(
                                 scope.launch {
                                     val currentList = uiState.messageList.toList()
                                     val conversationId = messageViewModel.saveConversation().toInt() // conversationのinsert
-                                    /*
-                                    val conversationList = mutableListOf(Conversation(conversationsId = conversationId.toLong(), title = ""))
-                                    messageViewModel.updateConversationList(conversationList)
-                                     */
+
+                                    val conversationList = messageViewModel.getAllConversations()
+                                    messageViewModel.updateConversationList(conversationList.toMutableList())
+                                    
                                     for (message in currentList) {
                                         messageViewModel.saveMessage(
                                             MessageData(

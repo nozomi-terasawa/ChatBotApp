@@ -35,6 +35,15 @@ class SaveMessageViewModel(
         }
     }
 
+    suspend fun getAllConversations(): List<Conversation> {
+        var conversationList = listOf<Conversation>()
+        val job = viewModelScope.launch {
+            conversationList = conversationRepository.getAllConversations()
+        }
+        job.join()
+        return conversationList
+    }
+
     fun updateConversationList (newList: MutableList<Conversation>) {
         savedUiState = savedUiState.copy(
             conversationList = newList
@@ -47,7 +56,6 @@ class SaveMessageViewModel(
             title = title
         )
         Log.d("result", "完了")
-
     }
 }
 
