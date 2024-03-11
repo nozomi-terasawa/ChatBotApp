@@ -2,16 +2,23 @@ package com.github.tera330.apps.chatgpt.ui
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.github.tera330.apps.chatgpt.MessageUiState
 import com.github.tera330.apps.chatgpt.apiService
 import com.github.tera330.apps.chatgpt.encryptedsharedpreferences.EncryptedSharedPreferences
@@ -35,8 +42,10 @@ fun InputField(
 
     Row(
         modifier = modifier.fillMaxWidth(), // このRowを画面いっぱいに拡張する
+        verticalAlignment = Alignment.CenterVertically // 垂直方向の中央揃え
     ) {
         OutlinedTextField(
+            shape = RoundedCornerShape(35.dp),
             value = uiState.userMessage,
             onValueChange = {
                 inputText(it)
@@ -44,9 +53,11 @@ fun InputField(
             label = { Text(text = "入力してください") },
             modifier = Modifier
                 .weight(1f) // OutlinedTextFieldが残りのスペースを使用するように重み付け
-                .padding(bottom = 10.dp)
+                .padding(5.dp)
+                .padding(bottom = 5.dp)
+                .heightIn(min = ButtonDefaults.MinHeight) // Buttonと同じ高さに指定
         )
-        Button(
+        IconButton(
             onClick = {
                 if (!uiState.userMessage.isNullOrBlank()) {
                     val currentList = uiState.messageList.toMutableList()
@@ -60,8 +71,13 @@ fun InputField(
                 }
             },
             modifier = Modifier // Buttonの幅を指定せず、内容に合わせる
+                .heightIn(min = ButtonDefaults.MinHeight)
+                .padding(5.dp)
+                .size(35.dp)
+            //shape = RoundedCornerShape(35.dp)
+
         ) {
-            Text(text = "↑", fontSize = 30.sp)
+            Icon(Icons.Filled.Send, contentDescription = null)
         }
     }
 }
