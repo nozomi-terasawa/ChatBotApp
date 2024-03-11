@@ -1,6 +1,7 @@
 package com.github.tera330.apps.chatgpt.ui
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +36,7 @@ import com.github.tera330.apps.chatgpt.roomdatabase.MessageData
 import com.github.tera330.apps.chatgpt.roomdatabase.MessageDataRepository
 import com.github.tera330.apps.chatgpt.roomdatabase.MessageDatabase
 import com.github.tera330.apps.chatgpt.roomdatabase.SaveMessageViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
@@ -57,11 +60,21 @@ fun HomeScreen(
         SaveMessageViewModel(conversationRepository, messageDataRepository)
     }
     val savedState = messageViewModel.savedUiState
+
+
     ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
                 ModalDrawerSheet {
-                    DrawerContent(conversation = savedState.conversationList)
+                    DrawerContent(
+                        conversation = savedState.conversationList,
+                        onItemCLicked = { selectedItem ->
+                            // selectedItem.conversationsId
+                        },
+                        drawerState,
+                        scope
+                    )
+
                 }
             },
         ) {
@@ -88,7 +101,7 @@ fun HomeScreen(
 
                                     val conversationList = messageViewModel.getAllConversations()
                                     messageViewModel.updateConversationList(conversationList.toMutableList())
-                                    
+
                                     for (message in currentList) {
                                         messageViewModel.saveMessage(
                                             MessageData(
@@ -116,22 +129,35 @@ fun HomeScreen(
                     getResponse,
                     changeList,
                     clearText,
-                    createTitle
+                    createTitle,
+                    messageViewModel
                 )
             }
         }
 }
 
 // Drawerに表示するコンテンツ
+@ExperimentalMaterial3Api
 @Composable
-fun DrawerContent(conversation: List<Conversation>) {
+fun DrawerContent(
+    conversation: List<Conversation>,
+    onItemCLicked: (Conversation) -> Unit,
+    drawerState: DrawerState,
+    scope: CoroutineScope) {
     Column(modifier = Modifier.padding(16.dp)) {
         // リストアイテムを表示する
         LazyColumn {
             items(conversation) { item ->
                 Text(
                     text = item.conversationsId.toString(),
-                    fontSize = 30.sp
+                    fontSize = 30.sp,
+                    modifier = Modifier.clickable {
+                        onItemCLicked
+                        scope.launch {
+                            drawerState.close()
+                        }
+                        Log.d("result", "ドロワーが押されました")
+                    }
                 )
                 Divider() // リストアイテムの間に区切り線を追加
             }
