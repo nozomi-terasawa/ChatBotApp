@@ -32,7 +32,6 @@ internal class MainActivity : ComponentActivity() {
         createTitle = { string -> savedViewModel.createTitle(string) },
         updateMessageList = { list -> messageViewModel.updateList(list)}
       )
-
     }
   }
 }

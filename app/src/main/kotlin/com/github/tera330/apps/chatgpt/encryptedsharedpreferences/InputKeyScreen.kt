@@ -1,6 +1,5 @@
 package com.github.tera330.apps.chatgpt.encryptedsharedpreferences
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,8 +30,6 @@ fun InputKeyScreen(
     val scope = rememberCoroutineScope()
     val encryptedSharedPreferences = EncryptedSharedPreferences(LocalContext.current)
 
-    Log.d("result", "キー入力画面")
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -60,7 +57,6 @@ fun InputKeyScreen(
                             encryptedSharedPreferences.saveKey("pass", apiKeyState.value)
                         }
                         navigateHome()
-                        Log.d("result", "押下されてます")
                     }
                 },
             ) {
