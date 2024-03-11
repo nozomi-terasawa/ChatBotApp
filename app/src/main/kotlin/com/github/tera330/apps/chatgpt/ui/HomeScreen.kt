@@ -1,8 +1,8 @@
 package com.github.tera330.apps.chatgpt.ui
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -71,7 +72,6 @@ fun HomeScreen(
                         conversation = savedState.conversationList,
                         onItemCLicked = { selectedItem ->
                             val id = selectedItem.conversationsId
-                            Log.d("result", "押されたIDは" + id + "です")
                             scope.launch {
                                 val messageData = messageViewModel.getMessagesByConversationId(id)
                                 val messageList = messageData.map { messageData ->
@@ -93,7 +93,10 @@ fun HomeScreen(
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = { Text("タイトル") },
+                        title = { Text(
+                            text = "ChatGPT",
+                            modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center, )},
                         navigationIcon = {
                             IconButton(onClick = {
                                 scope.launch {
