@@ -57,7 +57,7 @@ fun MessageBody(
 
         LazyColumn(
             modifier = modifier
-                .padding(top = 100.dp)
+                .padding(top = 50.dp)
                 .weight(1f),
             content = {
                 items(uiState.messageList) { message ->

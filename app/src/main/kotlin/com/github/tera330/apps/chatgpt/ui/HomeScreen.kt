@@ -2,13 +2,16 @@ package com.github.tera330.apps.chatgpt.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -23,7 +26,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -89,6 +94,7 @@ fun HomeScreen(
                             }
                         },
                         drawerState,
+                        modifier,
                         scope,
                     )
 
@@ -167,23 +173,39 @@ fun DrawerContent(
     conversation: List<Conversation>,
     onItemCLicked: (Conversation) -> Unit,
     drawerState: DrawerState,
+    modifier: Modifier = Modifier,
     scope: CoroutineScope) {
     Column(modifier = Modifier.padding(16.dp)) {
+        Text(text = "ChatGPT", fontSize = 35.sp, modifier = Modifier.padding(bottom = 10.dp))
+        Divider()
         // リストアイテムを表示する
-        LazyColumn {
+        LazyColumn(modifier = modifier.weight(1f)) {
             items(conversation) { item ->
                 Text(
-                    text = item.title,
+                    text = "#" + item.title,
                     fontSize = 30.sp,
-                    modifier = Modifier.clickable {
-                        onItemCLicked(item)
-                        scope.launch {
-                            drawerState.close()
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .clickable {
+                            onItemCLicked(item)
+                            scope.launch {
+                                drawerState.close()
+                            }
                         }
-                    }
                 )
                 Divider() // リストアイテムの間に区切り線を追加
             }
+        }
+        Divider()
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    Icons.Default.Settings,
+                    contentDescription = null,
+                    modifier = modifier.size(25.dp)
+                )
+            }
+            Text(text = "Setting", fontSize = 25.sp)
         }
     }
 }
