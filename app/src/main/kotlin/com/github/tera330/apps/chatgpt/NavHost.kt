@@ -12,6 +12,7 @@ import com.github.tera330.apps.chatgpt.encryptedsharedpreferences.EncryptedShare
 import com.github.tera330.apps.chatgpt.encryptedsharedpreferences.InputKeyScreen
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 import com.github.tera330.apps.chatgpt.ui.HomeScreen
+import com.github.tera330.apps.chatgpt.viewmodel.MessageUiState
 
 
 enum class Screen {
@@ -32,7 +33,7 @@ fun AppNav(
     updateLoad: () -> Unit,
     updateSuccess: () -> Unit,
     updateStr: (String) -> Unit,
-    updateNotYet: () -> Unit
+    updateNotYet: () -> Unit,
 
 ) {
     // val startDestination = Screen.SaveKeyScreen.name
@@ -54,7 +55,9 @@ fun AppNav(
         modifier = modifier
     ) {
         composable(route = com.github.tera330.apps.chatgpt.Screen.SaveKeyScreen.name) {
-            InputKeyScreen(navigateHome = { navController.navigate(com.github.tera330.apps.chatgpt.Screen.HomeScreen.name) })
+            InputKeyScreen(
+                navigateHome = { navController.navigate(com.github.tera330.apps.chatgpt.Screen.HomeScreen.name) },
+            )
         }
         composable(route = com.github.tera330.apps.chatgpt.Screen.HomeScreen.name) {
             HomeScreen(
@@ -68,7 +71,7 @@ fun AppNav(
                 updateLoad = updateLoad,
                 updateSuccess = updateSuccess,
                 updateStr = updateStr,
-                updateNotYet = updateNotYet
+                updateNotYet = updateNotYet,
             )
         }
     }

@@ -4,6 +4,7 @@ import android.util.Log
 import com.github.tera330.apps.chatgpt.model.chatcompletions.ChatRequest
 import com.github.tera330.apps.chatgpt.model.chatcompletions.ChatResponse
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
+import com.github.tera330.apps.chatgpt.viewmodel.MessageUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit

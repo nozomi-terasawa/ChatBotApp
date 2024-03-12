@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Modifier
+import com.github.tera330.apps.chatgpt.viewmodel.MessageViewModel
 
 
 @ExperimentalMaterial3Api
@@ -28,11 +29,11 @@ internal class MainActivity : ComponentActivity() {
         getResponse = { string -> messageViewModel.getResponse(string) },
         changeList = { list -> messageViewModel.updateList(list) },
         clearText = { messageViewModel.clearText() },
-        updateMessageList = { list -> messageViewModel.updateList(list)},
-        updateLoad = { messageViewModel.updateLoad()},
+        updateMessageList = { list -> messageViewModel.updateList(list) },
+        updateLoad = { messageViewModel.updateLoad() },
         updateSuccess = { messageViewModel.updateSuccess() },
         updateStr = { string -> messageViewModel.updateStr(string) },
-        updateNotYet = { messageViewModel.updateNotYet() }
+        updateNotYet = { messageViewModel.updateNotYet() },
       )
     }
   }

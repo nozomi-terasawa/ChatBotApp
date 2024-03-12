@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
@@ -28,20 +29,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontSynthesis.Companion.All
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.github.tera330.apps.chatgpt.MessageUiState
+import com.github.tera330.apps.chatgpt.viewmodel.MessageUiState
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
 import com.github.tera330.apps.chatgpt.roomdatabase.Conversation
 import com.github.tera330.apps.chatgpt.roomdatabase.ConversationRepository
 import com.github.tera330.apps.chatgpt.roomdatabase.MessageData
 import com.github.tera330.apps.chatgpt.roomdatabase.MessageDataRepository
 import com.github.tera330.apps.chatgpt.roomdatabase.MessageDatabase
-import com.github.tera330.apps.chatgpt.roomdatabase.SaveMessageViewModel
+import com.github.tera330.apps.chatgpt.viewmodel.SaveMessageViewModel
+import com.github.tera330.apps.chatgpt.viewmodel.SavedUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -59,7 +61,7 @@ fun HomeScreen(
     updateLoad: () -> Unit,
     updateSuccess: () -> Unit,
     updateStr: (String) -> Unit,
-    updateNotYet: () -> Unit
+    updateNotYet: () -> Unit,
 
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -96,6 +98,7 @@ fun HomeScreen(
                         drawerState,
                         modifier,
                         scope,
+                        allClear = { list -> messageViewModel.deleteAllConversation(list) },
                     )
 
                 }
@@ -174,7 +177,9 @@ fun DrawerContent(
     onItemCLicked: (Conversation) -> Unit,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    scope: CoroutineScope) {
+    scope: CoroutineScope,
+    allClear: (MutableList<Conversation>) -> Unit,
+    ) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(text = "ChatGPT", fontSize = 35.sp, modifier = Modifier.padding(bottom = 10.dp))
         Divider()
@@ -206,6 +211,17 @@ fun DrawerContent(
                 )
             }
             Text(text = "Setting", fontSize = 25.sp)
+        }
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 10.dp)) {
+            IconButton(onClick = {
+                allClear(mutableListOf()) }) {
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = null,
+                    modifier = modifier.size(25.dp)
+                )
+            }
+            Text(text = "All Clear", fontSize = 25.sp)
         }
     }
 }

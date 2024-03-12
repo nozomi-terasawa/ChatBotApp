@@ -1,4 +1,4 @@
-package com.github.tera330.apps.chatgpt
+package com.github.tera330.apps.chatgpt.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.getValue

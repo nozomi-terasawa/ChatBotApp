@@ -14,6 +14,12 @@ interface ConversationsDao {
 
     @Insert
     suspend fun insertConversation(conversations: Conversation): Long
+
+    @Query("DELETE FROM conversation WHERE conversation_id = :conversationId")
+    suspend fun deleteConversationById(conversationId: Long)
+
+    @Query("DELETE FROM conversation")
+    suspend fun deleteAllConversations()
 }
 
 @Dao

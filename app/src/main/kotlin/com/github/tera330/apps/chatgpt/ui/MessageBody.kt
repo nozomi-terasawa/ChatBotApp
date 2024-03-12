@@ -25,10 +25,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.github.tera330.apps.chatgpt.MessageUiState
-import com.github.tera330.apps.chatgpt.ResponseUiState
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message
-import com.github.tera330.apps.chatgpt.roomdatabase.SaveMessageViewModel
+import com.github.tera330.apps.chatgpt.viewmodel.MessageUiState
+import com.github.tera330.apps.chatgpt.viewmodel.ResponseUiState
+import com.github.tera330.apps.chatgpt.viewmodel.SaveMessageViewModel
 import kotlinx.coroutines.delay
 
 

@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.github.tera330.apps.chatgpt.MessageUiState
+import com.github.tera330.apps.chatgpt.viewmodel.MessageUiState
 import com.github.tera330.apps.chatgpt.apiService
 import com.github.tera330.apps.chatgpt.encryptedsharedpreferences.EncryptedSharedPreferences
 import com.github.tera330.apps.chatgpt.model.chatcompletions.child.Message

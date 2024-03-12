@@ -1,10 +1,14 @@
-package com.github.tera330.apps.chatgpt.roomdatabase
+package com.github.tera330.apps.chatgpt.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.tera330.apps.chatgpt.roomdatabase.Conversation
+import com.github.tera330.apps.chatgpt.roomdatabase.ConversationRepository
+import com.github.tera330.apps.chatgpt.roomdatabase.MessageData
+import com.github.tera330.apps.chatgpt.roomdatabase.MessageDataRepository
 import kotlinx.coroutines.launch
 
 class SaveMessageViewModel(
@@ -67,6 +71,19 @@ class SaveMessageViewModel(
         conversationState = conversationState.copy(
             title = title
         )
+    }
+
+    fun deleteConversationById(id: Long) {
+        viewModelScope.launch {
+            conversationRepository.deleteConversationById(id)
+        }
+    }
+
+    fun deleteAllConversation(newList: MutableList<Conversation>) {
+        viewModelScope.launch {
+            conversationRepository.deleteAllConversation()
+        }
+        updateConversationList(newList)
     }
 }
 
